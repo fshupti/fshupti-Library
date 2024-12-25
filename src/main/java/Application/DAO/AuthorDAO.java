@@ -27,7 +27,7 @@ public class AuthorDAO {
         Connection connection = ConnectionUtil.getConnection();
         List<Author> authors = new ArrayList<>();
         try {
-            //Write SQL logic here
+            // Write SQL logic here
             String sql = "SELECT * FROM author";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet rs = preparedStatement.executeQuery();
@@ -35,7 +35,7 @@ public class AuthorDAO {
                 Author author = new Author(rs.getInt("id"), rs.getString("name"));
                 authors.add(author);
             }
-        }catch(SQLException e){
+        } catch(SQLException e){
             System.out.println(e.getMessage());
         }
         return authors;
@@ -50,21 +50,25 @@ public class AuthorDAO {
     public Author insertAuthor(Author author){
         Connection connection = ConnectionUtil.getConnection();
         try {
-//          Write SQL logic here. You should only be inserting with the name column, so that the database may
-//          automatically generate a primary key.
+            // Write SQL logic here. You should only be inserting with the name column, so that the database may
+            // automatically generate a primary key.
             String sql = "INSERT INTO author (name) VALUES (?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             //write preparedStatement's setString method here.
-            
+            preparedStatement.setString(1, author.getName());
+
+            // Execute update and retrieve the generated keys (author_id)
             preparedStatement.executeUpdate();
             ResultSet pkeyResultSet = preparedStatement.getGeneratedKeys();
-            if(pkeyResultSet.next()){
-                int generated_author_id = (int) pkeyResultSet.getLong(1);
-                return new Author(generated_author_id, author.getName());
+
+            if (pkeyResultSet.next()) {
+                // Get the generated author_id and return the Author object with it
+                int generatedAuthorId = pkeyResultSet.getInt(1); // getInt for better type safety
+                return new Author(generatedAuthorId, author.getName());
             }
-        }catch(SQLException e){
-            System.out.println(e.getMessage());
+        } catch(SQLException e){
+            System.out.println("Error while inserting author: " + e.getMessage());
         }
         return null;
     }
