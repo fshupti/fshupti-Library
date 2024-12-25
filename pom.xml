@@ -56,5 +56,11 @@
             <artifactId>mockito-core</artifactId>
             <version>4.9.0</version>
         </dependency>
+         <!-- Logback Classic for better logging (if needed) -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.11</version>
+        </dependency>
     </dependencies>
 </project>
