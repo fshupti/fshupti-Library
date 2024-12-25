@@ -25,6 +25,7 @@ public class BookService {
     public BookService(){
         bookDAO = new BookDAO();
     }
+
     /**
      * Constructor for a BookService when a BookDAO is provided.
      * This is used for when a mock BookDAO that exhibits mock behavior is used in the test cases.
@@ -35,13 +36,15 @@ public class BookService {
     public BookService(BookDAO bookDAO){
         this.bookDAO = bookDAO;
     }
+
     /**
      * TODO: Use the bookDAO to retrieve all books.
      * @return all books.
      */
     public List<Book> getAllBooks() {
-        return null;
+        return bookDAO.getAllBooks();
     }
+
     /**
      * TODO: Use the bookDAO to persist a book to the database.
      * An ISBN will be provided in Book. Method should check if the book ISBN already exists before it attempts to
@@ -51,15 +54,22 @@ public class BookService {
      * key was already in use.)
      */
     public Book addBook(Book book) {
-
-        return null;
+        // Check if the book ISBN already exists
+        Book existingBook = bookDAO.getBookByIsbn(book.getIsbn());
+        if (existingBook != null) {
+            // If book exists, return null (or throw an exception, depending on requirements)
+            return null;
+        }
+        
+        // If the book doesn't exist, add it using the BookDAO
+        return bookDAO.insertBook(book);
     }
+
     /**
      * TODO: Use the bookDAO to retrieve a list of all books that have a bookCount above 0.
      * @return all available books (bookCount over zero)
      */
     public List<Book> getAllAvailableBooks() {
-        return null;
+        return bookDAO.getBooksWithBookCountOverZero();
     }
-
 }
